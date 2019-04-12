@@ -7,6 +7,7 @@ import binascii,base64
 
 class ThreadingMULTIServer(ThreadingMixIn, HTTPServer):
     pass
+
 class myHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         self.send_response(200)
@@ -19,8 +20,9 @@ class myHandler(BaseHTTPRequestHandler):
 	    
     def do_POST(self):
 	#self._set_headers()
-        print("принята информация")
+        print("PACKET RECIEVED")
         self.data_string = self.rfile.read(int(self.headers['Content-Length']))
+        #print(self.data_string)
         self.send_response(200)
         self.end_headers()
         data = self.data_string
@@ -43,12 +45,27 @@ class jreader():
         jjq_data = json.loads(jstring)['data']
         if jjq_type.startswith('ARDUINO'):
             jjq_data =  base64.b64decode(jjq_data).decode('utf-8')
-        elif jjq_type.startwith('BAYLAN'):
+        elif jjq_type.startswith('BAYLAN'):
             jjq_data = binascii.hexlify(base64.b64decode(jjq_data)).upper()
-        elif jjq_type.startwith('ZENNER_HCA'):
+            jjq_data = jjq_data.decode('utf-8')
+        elif jjq_type.startswith('ZENNER_HCA'):
             jjq_data = binascii.hexlify(base64.b64decode(jjq_data)).upper()
-        elif jjq_type.startwith('ETK-m'):
+            jjq_data = jjq_data.decode('utf-8')
+            
+        elif jjq_type.startswith('ETK-m'):
             jjq_data = binascii.hexlify(base64.b64decode(jjq_data)).upper()
+            jjq_data = jjq_data.decode('utf-8')
+            fin = 'неизвестный пакет' + str(jjq_data)
+            if jjq_data.startswith('11'):
+                print('recieved zenner payload sp1')
+                a1 = jjq_data[8:10]
+                a2 = jjq_data[6:8]
+                a3 = jjq_data[4:6]
+                a4 = jjq_data[2:4]
+                a = a1 + a2 + a3 + a4
+                jjq_data = str(int(a,16)) + ' liters'
+            else:
+                jjq_data = fin
         concl = 'GATEWAY_ID: '+ str(jjq_GW) + '\nApplication_Name: '+ str(jjq_App) + '\nDev_Type: '+ str(jjq_type) + '\nDev_EUI: '+ str(jjq_deveui) + '\nData: '+ str(jjq_data)
         return concl
 

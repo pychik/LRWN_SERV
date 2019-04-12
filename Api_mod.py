@@ -1,5 +1,6 @@
 import requests
 import json
+import time
 
 # fetching Jwt for admin admin
 def get_jwt(IP_PORT,login,password):
@@ -93,13 +94,16 @@ def get_devAddr(j_token,IP_PORT,devEUI):
     Nwskey = json.loads(j)['deviceActivation']['nwkSEncKey']
     print('devAddr: '+ str(devAddr) + ' Appskey: ' + str(Appskey) + ' Nwskey: ' + str(Nwskey))
 
-   
-iport = '192.168.1.153:8080'
-login = '"admin"'
-password = '"admin"'
-jwt = get_jwt(iport,login,password)
-get_APPs(jwt,iport)
-#js = '{"jwt":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJsb3JhLWFwcC1zZXJ2ZXIiLCJleHAiOjE1NTQ5MTE1OTUsImlzcyI6ImxvcmEtYXBwLXNlcnZlciIsIm5iZiI6MTU1NDgyNTE5NSwic3ViIjoidXNlciIsInVzZXJuYW1lIjoiYWRtaW4ifQ.sf_6kSnU2aWjzCumuIpFswXk5Lc_gM-nYWnqNno3Y2Q"}'
-#j = js.split('"jwt":',1)[1]
-#j = j.split('}',1)[0]
-#print(j)
+if __name__ == "__main__":
+    
+    iport = '192.168.1.153:8080'
+    login = '"admin"'
+    password = '"admin"'
+    while True:
+        jwt = get_jwt(iport,login,password)
+        get_APPs(jwt,iport)
+        time.sleep(3600)
+    #js = '{"jwt":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJsb3JhLWFwcC1zZXJ2ZXIiLCJleHAiOjE1NTQ5MTE1OTUsImlzcyI6ImxvcmEtYXBwLXNlcnZlciIsIm5iZiI6MTU1NDgyNTE5NSwic3ViIjoidXNlciIsInVzZXJuYW1lIjoiYWRtaW4ifQ.sf_6kSnU2aWjzCumuIpFswXk5Lc_gM-nYWnqNno3Y2Q"}'
+    #j = js.split('"jwt":',1)[1]
+    #j = j.split('}',1)[0]
+    #print(j)
