@@ -1,0 +1,7 @@
+# python
+venv/
+
+# idea
+*.iml
+.idea/misc.xml
+.idea/
