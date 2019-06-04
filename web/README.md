@@ -9,3 +9,5 @@ Admin credentials:
     username = admin
     password = admin
     email = admin@admin.com
+    
+To get users list use GET request on `http://127.0.0.1:8000/users/`
